@@ -110,7 +110,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emissive_Tex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 4db5ac5f335134a4d8f2aecdace5aec7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
@@ -132,7 +132,7 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 4db5ac5f335134a4d8f2aecdace5aec7, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: -1, y: -1}
+        m_Offset: {x: 0, y: 0}
     - _MaskMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -391,7 +391,7 @@ Material:
     - _OpaqueCullMode: 2
     - _OutlineOverridden: 0
     - _OutlineVisible: 1
-    - _Outline_Width: 18
+    - _Outline_Width: 22
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
     - _PPDMinSamples: 5
@@ -407,7 +407,7 @@ Material:
     - _RimLightVisible: 1
     - _RimLight_FeatherOff: 1
     - _RimLight_InsideMask: 0.125
-    - _RimLight_Power: 0.354
+    - _RimLight_Power: 0.383
     - _Rotate_EmissiveUV: 0
     - _Rotate_MatCapUV: 0
     - _Rotate_NormalMapForMatCapUV: 0
@@ -418,7 +418,7 @@ Material:
     - _Scroll_EmissiveV: 0
     - _SecondShadeOverridden: 0
     - _SecondShadeVisible: 1
-    - _Set_SystemShadowsToBase: 1
+    - _Set_SystemShadowsToBase: 0
     - _ShadeColor_Step: 0
     - _Smoothness: 0.4472136
     - _SmoothnessRemapMax: 1
@@ -510,7 +510,7 @@ Material:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
-    - _Emissive_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Emissive_Color: {r: 1, g: 0.78355217, b: 0.5707547, a: 1}
     - _FirstShadeMaskColor: {r: 0, g: 1, b: 1, a: 1}
     - _HighColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightMaskColor: {r: 1, g: 1, b: 0, a: 1}
