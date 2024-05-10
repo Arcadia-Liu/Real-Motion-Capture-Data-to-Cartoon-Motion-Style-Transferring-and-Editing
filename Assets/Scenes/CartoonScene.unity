@@ -185,7 +185,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1.3
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -345,6 +345,37 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!1 &937385092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 937385093}
+  m_Layer: 0
+  m_Name: StartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &937385093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937385092}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.592, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1495255661}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &948154768
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,7 +447,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 1
@@ -433,13 +464,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948154768}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: -0.1107963, y: -0.38288364, z: 0.12484563, w: 0.90859115}
+  m_LocalPosition: {x: 0, y: 1.97, z: 1.61}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: -6.069, y: -46.678, z: 18.268}
 --- !u!114 &948154771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -681,9 +712,56 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 937385093}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1495255662}
   m_SourcePrefab: {fileID: 100100000, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
+--- !u!1 &1495255658 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
+  m_PrefabInstance: {fileID: 1189934805}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1495255660 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
+  m_PrefabInstance: {fileID: 1189934805}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1495255661 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
+  m_PrefabInstance: {fileID: 1189934805}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1495255662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495255658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4091d964dcc90744682cbcd6fc3387d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetAvatar: {fileID: 1495255660}
+  bonemapPath: Assets/Scripts/0_BoneMaps/Bonemaps_CMU.txt
+  filename: Assets/Artworks/Animations/BVH Motions/Run_1.bvh
+  frameRate: 24
+  nearRatio: 5
+  modelMesh: {fileID: 1951451832}
+  bonemaps: []
+  startPos: {fileID: 937385092}
+  currentCamera: {fileID: 0}
+--- !u!1 &1951451832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -5450526443423814944, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
+  m_PrefabInstance: {fileID: 1189934805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
