@@ -17,12 +17,10 @@ LeftArm RightArm
 LeftForeArm RightForeArm
 LeftHand RightHand
 LThumb RightThumbProximal
-LeftFingerBase RightMiddleProximal
 LeftHandIndex1 RightMiddleDistal
 RightShoulder LeftShoulder
 RightArm LeftArm
 RightForeArm LeftForeArm
 RightHand LeftHand
 RThumb LeftThumbProximal
-RightFingerBase LeftMiddleProximal
 RightHandIndex1 LeftMiddleDistal

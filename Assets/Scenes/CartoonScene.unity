@@ -751,17 +751,12 @@ MonoBehaviour:
   targetAvatar: {fileID: 1495255660}
   bonemapPath: Assets/Scripts/0_BoneMaps/Bonemaps_CMU.txt
   filename: Assets/Artworks/Animations/BVH Motions/Run_1.bvh
-  frameRate: 24
-  nearRatio: 5
-  modelMesh: {fileID: 1951451832}
-  bonemaps: []
+  environmentFrameRate: 12
+  animationFrameRate: 12
   startPos: {fileID: 937385092}
-  currentCamera: {fileID: 0}
---- !u!1 &1951451832 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -5450526443423814944, guid: 5f60cd13c093d3a4eadc390b65726de2, type: 3}
-  m_PrefabInstance: {fileID: 1189934805}
-  m_PrefabAsset: {fileID: 0}
+  ifUsingCustomizedRate: 0
+  playRate: 50
+  bonemaps: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
