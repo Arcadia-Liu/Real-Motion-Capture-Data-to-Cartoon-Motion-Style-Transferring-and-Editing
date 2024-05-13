@@ -6,40 +6,43 @@ using UnityEngine;
 using Assets.Scripts;
 using JetBrains.Annotations;
 
-// TODO: 调整frame
-// TODO: 目前只缩放了左腿骨骼的长度
-
 public class BVHDriver : MonoBehaviour
 {
-    /*************************************  public 变量  ****************************************/
+    /***************************  Inspector面板UI public 可控变量  *******************************/
     [Header("Loader settings")]
     [Tooltip("This is the target avatar for which the animation should be loaded. Bone names should be identical to those in the BVH file and unique. All bones should be initialized with zero rotations. This is usually the case for VRM avatars.")]
     public Animator targetAvatar;
-
-    [Tooltip("This is the path to the file which describes Bonemaps between unity and bvh.")]
-    public string bonemapPath = @"Assets/Scripts/0_BoneMaps/Bonemaps_CMU.txt";
-
-    [Tooltip("This is the path to the BVH file that should be loaded. Bone offsets are currently being ignored by this loader.")]
-    public string filename;
-
-    [Tooltip("If the flag above is disabled, the frame rate given in the BVH file will be overridden by this value.")]
-    public float environmentFrameRate = 24.0f;
-    public float animationFrameRate = 24.0f;
-
     [Tooltip("Define the start position of animation.")]
     public GameObject startPos;
+    [Space]
 
+    [Header("External File Paths")]
+    [Tooltip("This is the path to the file which describes Bonemaps between unity and bvh.")]
+    public string bonemapPath = @"Assets/Scripts/0_BoneMaps/Bonemaps_CMU.txt";
+    [Tooltip("This is the path to the BVH file that should be loaded. Bone offsets are currently being ignored by this loader.")]
+    public string BVHFilename;
+    [Space]
+
+    [Header("Frame Rate Controller")]
+    [Tooltip("This is the overall refresh rate of project.")]
+    public float environmentFrameRate = 24.0f;
+    [Tooltip("This is the refresh rate of cartoon animation motion.")]
+    public float animationFrameRate = 24.0f;
     [SerializeField]
+    [Tooltip("If this flag is deactivated, the playing rate follows the original frame rate defined in BVH File.")]
     private bool ifUsingCustomizedRate = true;
     [ConditionalHide(nameof(ifUsingCustomizedRate), false), SerializeField]
+    [Tooltip("If the flag above is activated, this is the playing speed of FixedUpdate.")]
     private float playRate = 50.0f;
-
+    
     [Serializable]
     public struct BoneMap       // the corresponding bones between unity and bvh
     {
         public string bvh_name;
         public HumanBodyBones humanoid_bone;
     }
+    [Space]
+    [Header("Bonemap List")]
     public BoneMap[] bonemaps; 
 
 
@@ -51,13 +54,12 @@ public class BVHDriver : MonoBehaviour
     // 该函数不调用任何 Unity API 函数，因此可以安全地从另一个线程调用
     public void parseFile()
     {
-        string bvhData = File.ReadAllText(filename);
+        string bvhData = File.ReadAllText(BVHFilename);
         bp = new BVHParser(bvhData);
         // frameRate = 1f / bp.frameTime;
         originalFrameRate = 1f / bp.frameTime;
         frameRate = environmentFrameRate;
     }
-
     private Animator anim;
     private Camera currentCamera;
     private Dictionary<string, Quaternion> bvhT;
@@ -70,11 +72,13 @@ public class BVHDriver : MonoBehaviour
 
     private void Start()
     {
-        
+        /********************************  解析外部文件  *************************************/
         // set mapping between bvh_name and humanBodyBones
         BonemapReader.Read(bonemapPath);        // 调用BoneReader.Read，解析BVH文件
         bonemaps = BonemapReader.bonemaps;      // 设置 bvh_name 和 humanBodyBones 之间的映射关系
         parseFile();
+
+        /************************  计算并设置项目帧率和动作播放帧率  ****************************/
         Application.targetFrameRate = (Int16)frameRate;
         if(ifUsingCustomizedRate == false)
         {
@@ -84,20 +88,22 @@ public class BVHDriver : MonoBehaviour
         {
             Time.fixedDeltaTime = 1 / playRate;
         }
+        frameRatio = originalFrameRate / animationFrameRate;
 
+        /****************************  初始化骨骼和关键帧数据  ********************************/
         bvhT = bp.getKeyFrame(0);       // 获取bvh文件第0帧位置的BoneData，即bvh骨骼的Tpose信息
         bvhOffset = bp.getOffset(1.0f); 
         bvhHireachy = bp.getHierachy(); // 获得bvh文件的骨架结构信息，包含骨骼名称和骨骼节点的父子关系
         anim = targetAvatar.GetComponent<Animator>();   // 获取目标角色模型的Animator组件，用于后续对角色动画的控制
         unityT = new Dictionary<HumanBodyBones, Quaternion>();
-        frameRatio = originalFrameRate / animationFrameRate;
-        print(frameRatio);
         foreach (BoneMap bm in bonemaps)    // 遍历骨骼映射数据
         {
             // 将Tpose下，unity对象内置骨骼的名称和相对世界坐标系的旋转信息记录在unityT中
             unityT.Add(bm.humanoid_bone, anim.GetBoneTransform(bm.humanoid_bone).rotation);
         }
-        
+        frameIdx = 1;
+
+        /****************************  计算重定向中的骨骼缩放  ********************************/
         // 计算unity模型左腿的长度
         float unity_leftleg = (float)Math.Sqrt((anim.GetBoneTransform(HumanBodyBones.LeftLowerLeg).position - anim.GetBoneTransform(HumanBodyBones.LeftUpperLeg).position).sqrMagnitude) +
                               (float)Math.Sqrt((anim.GetBoneTransform(HumanBodyBones.LeftFoot).position - anim.GetBoneTransform(HumanBodyBones.LeftLowerLeg).position).sqrMagnitude);
@@ -110,7 +116,6 @@ public class BVHDriver : MonoBehaviour
             }
         }
         scaleRatio = unity_leftleg / bvh_leftleg;   // 得到骨骼缩放比例
-        frameIdx = 1;
     }
 
     private void FixedUpdate()

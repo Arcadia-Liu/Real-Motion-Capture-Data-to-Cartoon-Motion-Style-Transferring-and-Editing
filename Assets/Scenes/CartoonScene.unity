@@ -749,11 +749,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetAvatar: {fileID: 1495255660}
+  startPos: {fileID: 937385092}
   bonemapPath: Assets/Scripts/0_BoneMaps/Bonemaps_CMU.txt
-  filename: Assets/Artworks/Animations/BVH Motions/Run_1.bvh
+  BVHFilename: Assets/Artworks/Animations/BVH Motions/JumpTurn_1.bvh
   environmentFrameRate: 12
   animationFrameRate: 12
-  startPos: {fileID: 937385092}
   ifUsingCustomizedRate: 0
   playRate: 50
   bonemaps: []
