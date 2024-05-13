@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts;
 using JetBrains.Annotations;
+using UnityEngine.UIElements;
 
 public class BVHDriver : MonoBehaviour
 {
@@ -132,11 +133,92 @@ public class BVHDriver : MonoBehaviour
         /**********************   将BVH中的人物模型位移转换为unity 2D 运动规范   ******************/
         Dictionary<string, Vector3> currBVHPos = getBVHPos(currFrame, bvhHireachy, bvhOffset);
         Dictionary<string, Vector3> lastBVHPos = getBVHPos(lastFrame, bvhHireachy, bvhOffset);
-        BVHPosToUnityMovement(currBVHPos, lastBVHPos, frameIdx);
+        float angle = BVHPosToUnityMovement(currBVHPos, lastBVHPos, frameIdx);
+
+        /*****************************   离散旋转角色朝向   **********************************/
+        TheroldRotation(angle, gameObject);
 
         /*****************************   动画播放与循环   **********************************/
         frameIdx = (frameIdx < bp.frames - 1) ? frameIdx + 1 : 1;
     }
+
+
+
+
+    /*******************   根据相机正方向和人物正方向之间的夹角，离散旋转视角   *********************/
+    // 计算相机正方向和人物正方向之间的夹角
+    private float ComputeCamAngleCharacter(Dictionary<string, Vector3> moveDirection, Dictionary<string, Vector3> characterDirection)
+    {
+        Vector3 projectedCam = new Vector3(moveDirection["Near2D"].x, 0, moveDirection["Near2D"].z);
+        Vector3 projectedCh09 = new Vector3(characterDirection["Forward3D"].x, 0, characterDirection["Forward3D"].z);
+        float angle = Vector3.SignedAngle(projectedCam, projectedCh09, Vector3.up);
+        return angle;
+    }
+    // 离散旋转角色朝向
+    private void TheroldRotation(float angle, GameObject character)
+    {
+        Transform childTransform = transform.Find("Ch09");
+        if (-15 < angle && angle < 15) 
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x, 
+                30, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：正面对相机");
+        }
+        else if (-75 < angle && angle < -15)
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x,
+                0, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：侧前右");
+        }
+        else if (-105 < angle && angle < -75)
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x,
+                -60, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：正面右边");
+        }
+        else if (-165 < angle && angle < -105)
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x,
+                -90, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：侧后右");
+        }
+        else if ((165 < angle && angle <= 180) || (angle < -165))
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x,
+                -150, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：正背对相机");
+        }
+        else if (105 < angle && angle < 165)
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x,
+                -210, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：侧后左");
+        }
+        else if (75 < angle && angle < 105)
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x,
+                -240, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：正面左边");
+        }
+        else if (15 < angle && angle < 75)
+        {
+            Vector3 rotationAngle = new Vector3(anim.GetBoneTransform(HumanBodyBones.Hips).rotation.x,
+                -300, anim.GetBoneTransform(HumanBodyBones.Hips).rotation.z);
+            anim.GetBoneTransform(HumanBodyBones.Hips).rotation = Quaternion.Euler(rotationAngle);
+            Debug.Log("朝向：侧前左");
+        }
+    }
+
+
+
+
 
     // 返回在currFrame帧位置，各个关节节点在世界空间中的坐标
     private Dictionary<string, Vector3> getBVHPos(Dictionary<string, Quaternion> currFrame, 
@@ -167,15 +249,10 @@ public class BVHDriver : MonoBehaviour
     /********************************************************
      * BVHPosToUnityMovement：
      * 通过当前帧和上一帧中各个关节节点在世界空间坐标中的坐标位置，驱动unity人形动画移动
-     * 
-     * moveDirection:   2D动作运动目标方向
-     * { Forward2D: 2D角色前后方向，
-     *   Up2D: 2D角色上下方向，
-     *   Near2D: 2D角色z轴深度方向}
+     * moveDirection:   2D动作运动目标方向  {Forward2D: 2D角色前后方向，Up2D: 2D角色上下方向，Near2D: 2D角色z轴深度方向}
      * characterDirection:  人物模型自身方向定义
-     * currVelocity:    根节点的平均位移速度
      * ******************************************************************/
-    private void BVHPosToUnityMovement(Dictionary<string, Vector3> currBVHPos, Dictionary<string, Vector3> lastBVHPos, int frameIndex)
+    private float BVHPosToUnityMovement(Dictionary<string, Vector3> currBVHPos, Dictionary<string, Vector3> lastBVHPos, int frameIndex)
     {
         /************************    准备基础的速度和方向参数    ***************************/
         Dictionary<string, Vector3> moveDirection = get2DWorldDirection();
@@ -212,6 +289,9 @@ public class BVHDriver : MonoBehaviour
             anim.GetBoneTransform(HumanBodyBones.Hips).position = startPos.transform.position;
             gameObject.transform.localScale = startPos.transform.localScale;
         }
+
+        float angle = ComputeCamAngleCharacter(moveDirection, characterDirection);
+        return angle;
     }
 
 
