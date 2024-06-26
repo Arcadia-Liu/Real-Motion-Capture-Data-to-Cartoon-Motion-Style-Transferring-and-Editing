@@ -1,1 +1,1 @@
-# 2D-Cartoon-Motion-Editting-in-Unity
+# Real Motion Capture Data to Cartoon Motion Style Transferring and Editing
